@@ -1,0 +1,37 @@
+[
+  {
+    "id": "M001",
+    "name": "Aditya Raj",
+    "mobile": "7903704674"
+  },
+  {
+    "id": "M002",
+    "name": "Aman Kumar",
+    "mobile": "7277897866"
+  },
+  {
+    "id": "M003",
+    "name": "Aman Kumar Singh",
+    "mobile": "8765435678"
+  },
+  {
+    "id": "M004",
+    "name": "Sachin Kumar",
+    "mobile": "8765456789"
+  },
+  {
+    "id": "M005",
+    "name": "Archit",
+    "mobile": "6200423467"
+  },
+  {
+    "id": "M006",
+    "name": "Ishant Singh",
+    "mobile": "7788996655"
+  },
+  {
+    "id": "M007",
+    "name": "Sachin Kumar",
+    "mobile": "8521780421"
+  }
+]

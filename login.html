@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Integrated Library System Login</title>
+    <link rel="preconnect" href="https://images.unsplash.com">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="login-body">
+
+<main class="login-page">
+    <section class="login-hero" aria-label="Library welcome">
+        <div class="brand-mark">ILS</div>
+        <p class="eyebrow">Integrated Library System</p>
+        <h1>Integrated Library System</h1>
+        <p class="hero-copy">A premium admin experience for books, members, issue records, returns, and daily circulation.</p>
+        <div class="login-highlights" aria-label="System highlights">
+            <span>Inventory</span>
+            <span>Members</span>
+            <span>Transactions</span>
+        </div>
+    </section>
+
+    <section class="login-panel" aria-label="Login form">
+        <div class="login-card-image" aria-hidden="true"></div>
+        <div class="panel-heading">
+            <p class="eyebrow">Welcome back</p>
+            <h2>Sign in</h2>
+            <p>Use your admin account to continue.</p>
+        </div>
+
+        <form onsubmit="login(event)" class="login-form">
+            <label for="username">Username</label>
+            <input type="text" id="username" placeholder="Enter username" autocomplete="username" required>
+
+            <label for="password">Password</label>
+            <div class="password-box">
+                <input type="password" id="password" placeholder="Enter password" autocomplete="current-password" required>
+                <button type="button" class="ghost-button" onclick="togglePassword()" aria-label="Show or hide password">Show</button>
+            </div>
+
+            <button type="submit" class="primary-button">Login</button>
+            <p id="error" role="alert"></p>
+        </form>
+    </section>
+</main>
+
+<script src="script.js"></script>
+</body>
+</html>

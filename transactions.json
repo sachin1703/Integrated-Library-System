@@ -1,0 +1,42 @@
+[
+  {
+    "memberId": "M001",
+    "bookId": "B001",
+    "status": "returned",
+    "dueDate": "2026-05-14",
+    "fine": 0,
+    "date": "2026-04-30T10:53:41.099Z"
+  },
+  {
+    "memberId": "M001",
+    "bookId": "B002",
+    "status": "returned",
+    "dueDate": "2026-05-14",
+    "fine": 0,
+    "date": "2026-04-30T11:21:45.487Z"
+  },
+  {
+    "memberId": "M002",
+    "bookId": "B005",
+    "status": "issued",
+    "dueDate": "2026-05-14",
+    "fine": 0,
+    "date": "2026-04-30T10:49:32.960Z"
+  },
+  {
+    "memberId": "M002",
+    "bookId": "B002",
+    "status": "issued",
+    "dueDate": "2026-05-14",
+    "fine": 0,
+    "date": "2026-04-30T10:49:32.965Z"
+  },
+  {
+    "memberId": "M006",
+    "bookId": "B013",
+    "status": "returned",
+    "dueDate": "2026-05-14",
+    "fine": 0,
+    "date": "2026-04-30T10:59:39.847Z"
+  }
+]

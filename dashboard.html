@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Integrated Library System</title>
+    <link rel="preconnect" href="https://images.unsplash.com">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="dashboard-body">
+
+<aside class="sidebar">
+    <div class="sidebar-brand">
+        <div class="brand-mark">ILS</div>
+        <div>
+            <h3>Integrated Library System</h3>
+            <span>Admin Control Center</span>
+        </div>
+    </div>
+
+    <ul class="nav-list">
+        <li onclick="showSection('home')" class="active">Home</li>
+        <li onclick="showSection('member')">Add Member</li>
+        <li onclick="showSection('book')">Add Book</li>
+        <li onclick="showSection('issue')">Issue Book</li>
+        <li onclick="showSection('return')">Return Book</li>
+        <li onclick="showSection('transaction')">Transactions</li>
+        <li onclick="showSection('overdue')">Overdue</li>
+        <li onclick="showSection('viewMembers')">View Members</li>
+        <li onclick="showSection('viewBooks')">View Books</li>
+        <li onclick="logout()" class="logout-link">Logout</li>
+    </ul>
+</aside>
+
+<main class="content">
+    <header class="topbar">
+        <div>
+            <p class="eyebrow">Dashboard</p>
+            <h1>Integrated Library System</h1>
+        </div>
+        <div id="datetime" class="datetime"></div>
+    </header>
+
+    <section id="home" class="section home-section" style="display:block;">
+        <div class="home-hero">
+            <div class="home-copy">
+                <p class="eyebrow">Command Center</p>
+                <h2>Integrated Library System</h2>
+                <p>A professional control center for circulation, inventory, members, and transaction records.</p>
+                <div class="quick-actions">
+                    <button onclick="showSection('issue')">Issue Book &gt;</button>
+                    <button class="secondary-button" onclick="showSection('return')">Return Book &gt;</button>
+                    <button class="secondary-button" onclick="showSection('viewBooks')">View Books &gt;</button>
+                </div>
+            </div>
+            <div class="hero-panel" aria-label="System overview">
+                <span>Live Desk</span>
+                <strong>Fast Issue and Return</strong>
+                <p>Automatic records, clean lists, instant inventory visibility, due dates, and fines.</p>
+            </div>
+        </div>
+
+        <div class="stats-grid">
+            <article class="stat-card books-card">
+                <span>Total Books</span>
+                <strong id="totalBooks">-</strong>
+                <small>Catalog records</small>
+            </article>
+            <article class="stat-card members-card">
+                <span>Members</span>
+                <strong id="totalMembers">-</strong>
+                <small>Registered readers</small>
+            </article>
+            <article class="stat-card transactions-card">
+                <span>Transactions</span>
+                <strong id="totalTransactions">-</strong>
+                <small>Issue and return activity</small>
+            </article>
+            <article class="stat-card overdue-card">
+                <span>Overdue</span>
+                <strong id="totalOverdue">-</strong>
+                <small>Books past due date</small>
+            </article>
+        </div>
+
+        <div class="dashboard-grid">
+            <section class="chart-card">
+                <div class="mini-heading">
+                    <span>Issued vs Returned</span>
+                    <strong id="chartSummary">-</strong>
+                </div>
+                <div class="donut-chart" id="statusDonut"></div>
+                <div class="legend-row">
+                    <span><b class="legend-issued"></b> Issued</span>
+                    <span><b class="legend-returned"></b> Returned</span>
+                </div>
+            </section>
+            <section class="chart-card wide-chart">
+                <div class="mini-heading">
+                    <span>Top Issued Books</span>
+                    <strong>Usage</strong>
+                </div>
+                <div id="topBooksChart" class="bar-chart"></div>
+            </section>
+            <section class="chart-card">
+                <div class="mini-heading">
+                    <span>Availability</span>
+                    <strong id="availabilitySummary">-</strong>
+                </div>
+                <div id="availabilityChart" class="availability-chart"></div>
+            </section>
+        </div>
+    </section>
+
+    <section id="member" class="section panel">
+        <div class="section-heading">
+            <div>
+                <p class="eyebrow">Members</p>
+                <h2>Add Member</h2>
+            </div>
+        </div>
+        <label>Member ID (Auto)</label>
+        <input id="mid" readonly>
+        <input id="mname" placeholder="Name">
+        <div class="input-action">
+            <input id="mmobile" placeholder="Mobile">
+            <button onclick="addMember()" aria-label="Add member">Enter &gt;</button>
+        </div>
+    </section>
+
+    <section id="book" class="section panel">
+        <div class="section-heading">
+            <div>
+                <p class="eyebrow">Inventory</p>
+                <h2>Add Book</h2>
+            </div>
+            <span class="section-note">Build a list, then save all</span>
+        </div>
+        <label>Book ID (Auto)</label>
+        <input id="bid" readonly>
+        <input id="bname" placeholder="Book Name">
+        <input id="bauthor" placeholder="Author">
+        <div class="input-action">
+            <input id="bqty" placeholder="Quantity">
+            <button class="secondary-button" onclick="addBookToGrid()" aria-label="Add book to list">Enter &gt;</button>
+        </div>
+
+        <div class="button-row">
+            <input type="file" id="excelFile" accept=".xlsx, .xls">
+            <button onclick="uploadExcel()">Upload Excel &gt;</button>
+            <button onclick="saveAllBooks()">Save All &gt;</button>
+        </div>
+
+        <table id="bookGrid">
+            <thead>
+                <tr>
+                    <th>No</th>
+                    <th>Name</th>
+                    <th>Author</th>
+                    <th>Qty</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </section>
+
+    <section id="issue" class="section panel">
+        <div class="section-heading">
+            <div>
+                <p class="eyebrow">Circulation</p>
+                <h2>Issue Book</h2>
+            </div>
+        </div>
+        <div class="form-grid issue-grid">
+            <div class="input-action">
+                <input id="issueMid" placeholder="Member ID" list="memberSuggestions" onkeypress="handleMemberEnter(event)">
+                <button class="secondary-button" onclick="fetchIssueMember()" aria-label="Find member">Find &gt;</button>
+            </div>
+            <input id="memberName" placeholder="Member Name" readonly>
+            <input id="memberMobile" placeholder="Mobile" readonly>
+            <div class="input-action">
+                <input id="issueBid" placeholder="Book ID" list="bookSuggestions" onkeypress="handleBookEnter(event)">
+                <button class="secondary-button" onclick="fetchIssueBook()" aria-label="Find book">Find &gt;</button>
+            </div>
+            <input id="bookName" placeholder="Book Name" readonly>
+            <input id="bookAuthor" placeholder="Author" readonly>
+            <input id="bookQty" placeholder="Available Qty" readonly>
+            <input id="dueDate" type="date" aria-label="Due date">
+        </div>
+        <div class="button-row">
+            <button onclick="issueBook()">Issue Book &gt;</button>
+            <button class="secondary-button" onclick="addBookToList()">Add Book &gt;</button>
+        </div>
+        <ul id="issueList" class="selected-list"></ul>
+    </section>
+
+    <section id="return" class="section panel">
+        <div class="section-heading">
+            <div>
+                <p class="eyebrow">Circulation</p>
+                <h2>Return Book</h2>
+            </div>
+            <span class="section-note">Fine: Rs. 5 per late day</span>
+        </div>
+        <div class="input-action">
+            <input id="returnMid" placeholder="Member ID" list="memberSuggestions" onkeypress="handleReturnMember(event)">
+            <button class="secondary-button" onclick="fetchReturnMember()" aria-label="Find issued books">Find &gt;</button>
+        </div>
+        <input id="rMemberName" placeholder="Member Name" readonly>
+        <h3>Issued Books</h3>
+        <ul id="issuedList" class="selected-list"></ul>
+        <button onclick="returnSelectedBooks()">Return Selected &gt;</button>
+    </section>
+
+    <section id="transaction" class="section panel">
+        <div class="section-heading">
+            <div>
+                <p class="eyebrow">History</p>
+                <h2>Transactions</h2>
+            </div>            
+        </div>
+        <div class="toolbar">
+            <input id="transactionSearch" placeholder="Search transactions" oninput="getTransactions()">
+            <input type="date" id="dateFilter" onchange="getTransactions()" aria-label="Transaction date">
+            <select id="filterType" onchange="getTransactions()">
+                <option value="">All</option>
+                <option value="issued">Issued</option>
+                <option value="returned">Returned</option>
+            </select>
+            <button class="secondary-button" onclick="exportCsv('transactions')">Export CSV &gt;</button>
+            <button class="secondary-button" onclick="printReport('transaction')">Print &gt;</button>
+        </div>
+        <table id="transTable">
+            <thead>
+                <tr>
+                    <th>No</th>
+                    <th>Member ID</th>
+                    <th>Book ID</th>
+                    <th>Status</th>
+                    <th>Due Date</th>
+                    <th>Fine</th>
+                    <th>Date</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </section>
+
+    <section id="overdue" class="section panel">
+        <div class="section-heading">
+            <div>
+                <p class="eyebrow">Due Control</p>
+                <h2>Overdue Books</h2>
+            </div>
+        
+        </div>
+        <div class="toolbar">
+            <input id="overdueSearch" placeholder="Search overdue records" oninput="loadOverdue()">
+            <button class="secondary-button" onclick="exportCsv('overdue')">Export CSV &gt;</button>
+            <button class="secondary-button" onclick="printReport('overdue')">Print &gt;</button>
+        </div>
+        <table id="overdueTable">
+            <thead>
+                <tr>
+                    <th>Member ID</th>
+                    <th>Member</th>
+                    <th>Mobile</th>
+                    <th>Book ID</th>
+                    <th>Book</th>
+                    <th>Due Date</th>
+                    <th>Fine</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </section>
+
+    <section id="viewMembers" class="section panel">
+        <div class="section-heading">
+            <div>
+                <p class="eyebrow">Directory</p>
+                <h2>Members List</h2>
+            </div>
+        </div>
+        <div class="toolbar">
+            <input id="memberSearch" placeholder="Search by ID, name, or mobile" oninput="loadMembers()">
+            <button class="secondary-button" onclick="exportCsv('members')">Export CSV &gt;</button>
+            <button class="secondary-button" onclick="printReport('viewMembers')">Print &gt;</button>
+        </div>
+        <table id="memberTable">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Mobile</th>
+                    <th>Currently Issued</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </section>
+
+    <section id="viewBooks" class="section panel">
+        <div class="section-heading">
+            <div>
+                <p class="eyebrow">Inventory</p>
+                <h2>Book Inventory</h2>
+            </div>           
+        </div>
+        <div class="toolbar">
+            <input id="bookSearch" placeholder="Search by ID, name, author, or status" oninput="loadBooks()">
+            <select id="bookStatusFilter" onchange="loadBooks()">
+                <option value="">All Stock</option>
+                <option value="Available">Available</option>
+                <option value="Low Stock">Low Stock</option>
+                <option value="Out of Stock">Out of Stock</option>
+            </select>
+            <button class="secondary-button" onclick="exportCsv('books')">Export CSV &gt;</button>
+            <button class="secondary-button" onclick="printReport('viewBooks')">Print &gt;</button>
+        </div>
+        <table id="bookTable">
+            <thead>
+                <tr>
+                    <th>No</th>
+                    <th>Book ID</th>
+                    <th>Name</th>
+                    <th>Author</th>
+                    <th>Quantity</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </section>
+</main>
+
+<datalist id="memberSuggestions"></datalist>
+<datalist id="bookSuggestions"></datalist>
+
+<div id="toastHost" class="toast-host" aria-live="polite"></div>
+
+<div id="confirmModal" class="modal-backdrop" aria-hidden="true">
+    <div class="modal-card confirm-card">
+        <p class="eyebrow">Confirm</p>
+        <h2 id="confirmTitle">Are you sure?</h2>
+        <p id="confirmMessage">This action cannot be undone.</p>
+        <div class="modal-actions">
+            <button class="secondary-button" onclick="closeConfirm(false)">Cancel</button>
+            <button class="danger-button" onclick="closeConfirm(true)">Delete &gt;</button>
+        </div>
+    </div>
+</div>
+
+<div id="detailModal" class="modal-backdrop" aria-hidden="true">
+    <div class="modal-card detail-card">
+        <button class="modal-close" onclick="closeDetailModal()" aria-label="Close">x</button>
+        <div id="detailContent"></div>
+    </div>
+</div>
+
+<div id="editModal" class="modal-backdrop" aria-hidden="true">
+    <div class="modal-card">
+        <button class="modal-close" onclick="closeEditModal()" aria-label="Close">x</button>
+        <p class="eyebrow" id="editEyebrow">Edit</p>
+        <h2 id="editTitle">Edit Record</h2>
+        <div id="editFields"></div>
+        <div class="modal-actions">
+            <button class="secondary-button" onclick="closeEditModal()">Cancel</button>
+            <button onclick="saveEdit()">Save Changes &gt;</button>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
+<script src="script.js"></script>
+</body>
+</html>
